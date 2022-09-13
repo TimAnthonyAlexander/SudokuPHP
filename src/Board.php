@@ -294,6 +294,10 @@ class Board{
         return true;
     }
 
+    public function getField(int $posX, int $posY): Field {
+        return $this->board[$posY][$posX];
+    }
+
     public function isFullButNotCorrect(): bool {
         if (self::isComplete($this, $this->settings)) {
             return false;

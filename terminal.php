@@ -47,24 +47,33 @@ while (!$rules->getBoard()->isComplete($rules->getBoard(), $rules->settings)) {
     if ($keypress){
 
         if ($actual === 'UP') {
-            $posY--;
+            if ($posY > 0 && $posY <= 8) {
+                $posY--;
+            }
         }
         if ($actual === 'DOWN') {
-            $posY++;
+            if ($posY >= 0 && $posY < 8) {
+                $posY++;
+            }
         }
         if ($actual === 'LEFT') {
-            $posX--;
+            if ($posX > 0 && $posX <= 8) {
+                $posX--;
+            }
         }
         if ($actual === 'RIGHT') {
-            $posX++;
+            if ($posX >= 0 && $posX < 8) {
+                $posX++;
+            }
         }
         print "\033[2J\033[;H";
 
         // Check if it is a number
         if (is_numeric($actual)) {
-            if ($rules->getBoard()->isFieldFilled($posX, $posY) === false) {
-                $rules->getBoard()->setEnteredNumber($posX, $posY, (int) $actual);
-                $rules->getBoard()->setFieldFilled($posX, $posY, true);
+            $field = $rules->getBoard()->getField($posX, $posY);
+            if ($field->filled === false || $field->enteredNumber !== 0) {
+                $field->enteredNumber = (int) $actual;
+                $field->filled = true;
             }
         }
 
