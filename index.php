@@ -113,6 +113,7 @@ foreach (range(0, 8) as $y) {
     echo '</tr>';
 }
 ?>
+</table>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>
     // This js checks for keyboard input of numbers 1-9 and submits the form with the number, if the x and y are set.
@@ -145,3 +146,13 @@ foreach (range(0, 8) as $y) {
     // This function calls checkField() after 20ms
     setTimeout(checkField, 20);
 </script>
+
+<!-- Now numbers -->
+<div id="numbers" style="display: none;">
+    <h5>Click on a number to fill the field</h5>
+    <?php
+    foreach (range(1, 9) as $number) {
+        echo '<button style="width: 39px; height: 50px;" onclick="document.getElementById(\'number\').value = '.$number.'; document.getElementById(\'form\').submit();">'.$number.'</button>';
+    }
+    ?>
+</div>
