@@ -96,10 +96,17 @@ echo '</form>';
 
 echo '<table>';
 print '<h5>Click on a field and press a number key on your keyboard</h5>';
+$leftC = 0;
+$topC = 0;
 foreach (range(0, 8) as $y) {
+    $topC++;
     echo '<tr>';
     foreach (range(0, 8) as $x) {
+        $leftC++;
         $field = $board->getField($x, $y);
+
+        $style = '';
+
         if ($field->filled === true) {
             if ($field->enteredNumber === 0) {
                 echo '<td id="'.$y.$x.'" style="background-color: darkgray; width: 40px; height: 40px; text-align: center; border: 2px solid gray;">'.$field->number.'</td>';
@@ -110,10 +117,11 @@ foreach (range(0, 8) as $y) {
             echo '<td id="'.$y.$x.'" style="background-color: white; width: 40px; height: 40px; text-align: center;border: 2px solid gray;" onclick="document.getElementById(\'x\').value = '.$x.'; document.getElementById(\'y\').value = '.$y.'; document.getElementById(\'numbers\').style.display = \'block\';"></td>';
         }
     }
+    $leftC = 0;
     echo '</tr>';
 }
+echo '</table>';
 ?>
-</table>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>
     // This js checks for keyboard input of numbers 1-9 and submits the form with the number, if the x and y are set.
@@ -126,25 +134,55 @@ foreach (range(0, 8) as $y) {
         }
     });
 
-    // This function marks all fields without a border
-    // Then it marks the field for x.value and y.value (id = xy) with a red border
-    function checkField() {
-        var x = document.getElementById('x').value;
-        var y = document.getElementById('y').value;
+    // This function goes through all fields and if makes the border thicker at the edges of the 3x3 boxes
+    function checkFields() {
         var fields = document.getElementsByTagName('td');
         for (var i = 0; i < fields.length; i++) {
-            fields[i].style.border = '2px solid gray';
+            var x = i % 9;
+            var y = Math.floor(i / 9);
+            var currentX = parseInt(document.getElementById('x').value);
+            var currentY = parseInt(document.getElementById('y').value);
+
+            // If x and y correlate to the current field, make the border red and thick
+            // Else make the border gray and thick
+
+            if (x === currentX && y === currentY) {
+                fields[i].style.border = '2px solid red';
+                if (x % 3 === 0) {
+                    fields[i].style.borderLeft = '3px solid red';
+                }
+                if (y % 3 === 0) {
+                    fields[i].style.borderTop = '3px solid red';
+                }
+                if (x % 3 === 2) {
+                    fields[i].style.borderRight = '3px solid red';
+                }
+                if (y % 3 === 2) {
+                    fields[i].style.borderBottom = '3px solid red';
+                }
+            } else {
+                fields[i].style.border = '2px solid gray';
+                if (x % 3 === 0) {
+                    fields[i].style.borderLeft = '3px solid black';
+                }
+                if (y % 3 === 0) {
+                    fields[i].style.borderTop = '3px solid black';
+                }
+                if (x % 3 === 2) {
+                    fields[i].style.borderRight = '3px solid black';
+                }
+                if (y % 3 === 2) {
+                    fields[i].style.borderBottom = '3px solid black';
+                }
+            }
+
         }
-        if (x !== '' && y !== '') {
-            console.log(x, y);
-            document.getElementById(y+x).style.border = '2px dotted red';
-        }
-        // This function calls itself after 20ms
-        setTimeout(checkField, 20);
+
+        setTimeout(checkFields, 20);
     }
 
     // This function calls checkField() after 20ms
-    setTimeout(checkField, 20);
+    setTimeout(checkFields, 20);
 </script>
 
 <!-- Now numbers -->
