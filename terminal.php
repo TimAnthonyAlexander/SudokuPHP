@@ -73,7 +73,6 @@ while (!$rules->getBoard()->isComplete($rules->getBoard(), $rules->settings)) {
 
         if ($rules->getBoard()->isFullButNotCorrect()) {
             print PHP_EOL.'The sudoku is not correct.';
-            break;
         }
     }
 }
