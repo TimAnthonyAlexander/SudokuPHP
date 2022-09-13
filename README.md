@@ -2,11 +2,12 @@
 
 ## Installation
 
-Just execute ``php terminal.php``
+For terminal interface, use ``composer terminal``.
+To start the frontend on 127.0.0.1:8000, use ``composer start-server``.
 
 ## Settings
 
-Change difficulty mode in terminal.php.
+Change difficulty mode in terminal.php or in the frontend ui.
 
 There is:
 - $mode = 0

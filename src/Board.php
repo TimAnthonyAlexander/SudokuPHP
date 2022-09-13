@@ -83,8 +83,8 @@ class Board{
 
         $percentage = match($mode){
             0 => 0.4,
-            1 => 0.8,
-            2 => 0.9,
+            1 => 0.6,
+            2 => 0.8,
             default => 0.4,
         };
 
