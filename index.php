@@ -113,6 +113,7 @@ foreach (range(0, 8) as $y) {
     echo '</tr>';
 }
 ?>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script>
     // This js checks for keyboard input of numbers 1-9 and submits the form with the number, if the x and y are set.
     document.addEventListener('keydown', function(event) {
