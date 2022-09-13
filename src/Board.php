@@ -243,6 +243,10 @@ class Board{
     public static function isComplete(Board $oldBoard, Settings $settings): bool {
         $board = clone $oldBoard;
 
+        if (!$board->isFull()) {
+            return false;
+        }
+
         for($h = 0; $h < $settings->height; $h++){
             for($w = 0; $w < $settings->width; $w++){
                 $quadrant = $board->calculateQuadrantForPosition($h, $w);
@@ -268,17 +272,25 @@ class Board{
                     $numbersOfVerticalRow[] = $field->number;
                 }
 
+                // Remove the current $h $w from $numbersOfQuadrant, $numbersOfHorizontalRow and $numbersOfVerticalRow
+                // to check if the current $h $w is the only one missing
+                $numbersOfQuadrant = array_diff($numbersOfQuadrant, [$board->getNumberInPosition($w, $h)]);
+                $numbersOfHorizontalRow = array_diff($numbersOfHorizontalRow, [$board->getNumberInPosition($w, $h)]);
+                $numbersOfVerticalRow = array_diff($numbersOfVerticalRow, [$board->getNumberInPosition($w, $h)]);
+
                 $allNumbersPossible = range(1, min($settings->width, $settings->height));
+
 
                 $numbersPossible = array_diff($allNumbersPossible, $numbersOfQuadrant, $numbersOfHorizontalRow, $numbersOfVerticalRow);
 
-                if (count($numbersPossible) === 0) {
+                // Return false if the number is not in the possible numbers
+                if (!in_array($board->getNumberInPosition($w, $h), $numbersPossible)) {
                     return false;
                 }
 
                 $number = $numbersPossible[array_rand($numbersPossible)];
 
-                $board[$h][$w] = new Field(
+                $board->board[$h][$w] = new Field(
                     row: $h,
                     column: $w,
                     quadrant: $quadrant,
@@ -294,6 +306,13 @@ class Board{
         return true;
     }
 
+    /**
+     * @return array
+     */
+    public function getBoard(): array{
+        return $this->board;
+    }
+
     public function getField(int $posX, int $posY): Field {
         return $this->board[$posY][$posX];
     }
@@ -303,6 +322,24 @@ class Board{
             return false;
         }
 
+        if (!$this->isFull()) {
+            return false;
+        }
+
+        foreach ($this->board as $row) {
+            foreach ($row as $field) {
+                assert($field instanceof Field);
+                if ($field->filled === false) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function isFull(): bool
+    {
         foreach ($this->board as $row) {
             foreach ($row as $field) {
                 assert($field instanceof Field);
